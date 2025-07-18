@@ -38,16 +38,16 @@
    ```bash
    NODE_ENV=production
    PORT=8000
-   SUPABASE_URL=https://pwwmfkkmxiqjtjvlpofm.supabase.co
-   SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3d21ma2tteGlxanRqdmxwb2ZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODYyNTYsImV4cCI6MjA2ODM2MjI1Nn0.eqVCjk7n7V_5PEa3jDkp2gpGZ2TaCrZcBxKx5XYwQW4
-   SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3d21ma2tteGlxanRqdmxwb2ZtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Mjc4NjI1NiwiZXhwIjoyMDY4MzYyMjU2fQ.nAnougcTKkC-6VtEhvSNWe02u6gp2ymPQK5N3d9qAog
-   RESEND_API_KEY=re_S32s3zs3_PKtB3UsV7bfV7xtrHFebPFMy
-   FROM_EMAIL=noreply@interlink.com
-   FROM_NAME=InterLink
-   FRONTEND_URL=https://your-netlify-site.netlify.app
-   CORS_ORIGIN=https://your-netlify-site.netlify.app
-   JWT_SECRET=aA4zBcu9agFrDJbpZ6x/UhCHE1EGJ5DXAqFNNnr2M5VBGpS3r/2eGtr/fB3yxA+8p+2Om25pPvBa8hiVjjSF9A==
-   JWT_REFRESH_SECRET=57s/Zp7KZJL/aVnISv4bnmjqMLxo9jDND/De3pj7Wkf8bRQhtc2g2fo3mMk7WmSYAYSORf+iCqnQ8du0UJAIMQ==
+   SUPABASE_URL=
+   SUPABASE_ANON_KEY=
+   SUPABASE_SERVICE_ROLE_KEY=
+   RESEND_API_KEY=
+   FROM_EMAIL=
+   FROM_NAME=
+   FRONTEND_URL=
+   CORS_ORIGIN=
+   JWT_SECRET=
+   JWT_REFRESH_SECRET=
    ```
 
 3. **Get Railway URL**
@@ -70,8 +70,8 @@
 
 2. **Set Environment Variables in Netlify**
    ```bash
-   NEXT_PUBLIC_SUPABASE_URL=https://pwwmfkkmxiqjtjvlpofm.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3d21ma2tteGlxanRqdmxwb2ZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODYyNTYsImV4cCI6MjA2ODM2MjI1Nn0.eqVCjk7n7V_5PEa3jDkp2gpGZ2TaCrZcBxKx5XYwQW4
+   NEXT_PUBLIC_SUPABASE_URL=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
    NEXT_PUBLIC_API_URL=https://your-railway-backend.railway.app
    ```
 
@@ -162,7 +162,7 @@ curl https://your-railway-backend.railway.app/health
 
 **Frontend URL**: `https://your-netlify-site.netlify.app`
 **Backend URL**: `https://your-railway-backend.railway.app`
-**Database**: `https://pwwmfkkmxiqjtjvlpofm.supabase.co`
+**Database**: ``
 
 ## 🎯 App Functionality Status
 
