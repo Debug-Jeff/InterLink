@@ -1,5 +1,5 @@
 "use client"
-import { getClientById, getProjectsByClientId } from "@/lib/data"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Mail, User, CalendarDays, Edit } from "lucide-react"
@@ -14,6 +14,7 @@ import { useActionState } from "react"
 import { updateClient } from "@/app/company/client-actions"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
 import {
   Table,
   TableHeader,
@@ -23,9 +24,24 @@ import {
   TableCell as TableCellComponent,
 } from "@/components/ui/table"
 
-// Define types for data fetched from server
-type ClientItem = Awaited<ReturnType<typeof getClientById>>
-type ProjectItem = Awaited<ReturnType<typeof getProjectsByClientId>>[number]
+// Define types for client-side data
+type ClientItem = {
+  id: string
+  name: string
+  contact_email: string
+  contact_person: string
+  status: string
+  created_at: string
+  company_id: string
+} | null
+
+type ProjectItem = {
+  id: string
+  name: string
+  status: string
+  start_date: string | null
+  end_date: string | null
+}
 
 interface ClientDetailPageProps {
   params: {
@@ -38,6 +54,8 @@ export default function ClientDetailPage({ params }: ClientDetailPageProps) {
   const [client, setClient] = useState<ClientItem>(null)
   const [projects, setProjects] = useState<ProjectItem[]>([])
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
 
   // Action state for update form
   const [updateState, updateAction, updatePending] = useActionState(updateClient, null)
@@ -45,17 +63,52 @@ export default function ClientDetailPage({ params }: ClientDetailPageProps) {
   // Fetch data on component mount and when ID changes
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedClient = await getClientById(params.id)
-      const fetchedProjects = await getProjectsByClientId(params.id)
-      if (fetchedClient) {
-        setClient(fetchedClient)
-      } else {
-        notFound() // If client not found, trigger Next.js notFound
+      try {
+        // Get current authenticated user
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+        
+        if (userError || !user) {
+          router.push("/signin")
+          return
+        }
+
+        // Fetch client by ID (ensure it belongs to the authenticated company)
+        const { data: clientData, error: clientError } = await supabase
+          .from('clients')
+          .select('*')
+          .eq('id', params.id)
+          .eq('company_id', user.id)
+          .single()
+
+        if (clientError || !clientData) {
+          notFound() // If client not found, trigger Next.js notFound
+          return
+        }
+
+        setClient(clientData)
+
+        // Fetch projects associated with this client
+        const { data: projectsData, error: projectsError } = await supabase
+          .from('projects')
+          .select('id, name, status, start_date, end_date')
+          .eq('client_id', params.id)
+          .eq('company_id', user.id)
+          .order('created_at', { ascending: false })
+
+        if (projectsError) {
+          console.error('Error fetching projects:', projectsError)
+          setProjects([])
+        } else {
+          setProjects(projectsData || [])
+        }
+      } catch (error) {
+        console.error('Error in fetchData:', error)
+      } finally {
+        setLoading(false)
       }
-      setProjects(fetchedProjects)
     }
     fetchData()
-  }, [params.id])
+  }, [params.id, router, supabase])
 
   // Handle update success/error
   useEffect(() => {
@@ -73,8 +126,15 @@ export default function ClientDetailPage({ params }: ClientDetailPageProps) {
     }
   }, [updateState, router])
 
-  if (!client) {
-    return null // Or a loading spinner, notFound() is handled in useEffect
+  if (loading || !client) {
+    return (
+      <div className="p-8 bg-white rounded-xl shadow-md border border-gray-100 text-center text-gray-500">
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
+          Loading client details...
+        </div>
+      </div>
+    )
   }
 
   return (

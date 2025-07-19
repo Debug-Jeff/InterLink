@@ -107,28 +107,49 @@ export default function AboutPage() {
       role: "CEO & Co-Founder",
       bio: "Former startup founder with 10+ years in talent acquisition. Passionate about connecting great people with great opportunities.",
       image: "/placeholder.svg?height=300&width=300",
-      gradient: "bg-gradient-primary",
+      gradient: "bg-gradient-to-r from-blue-500 to-purple-500",
     },
     {
       name: "Marcus Rodriguez",
       role: "CTO & Co-Founder",
       bio: "Tech visionary with expertise in AI and machine learning. Leading our platform's technical innovation.",
       image: "/placeholder.svg?height=300&width=300",
-      gradient: "bg-gradient-secondary",
+      gradient: "bg-gradient-to-r from-purple-500 to-pink-500",
     },
     {
       name: "Emily Watson",
       role: "Head of Operations",
       bio: "Operations expert ensuring seamless experiences for both interns and startups on our platform.",
       image: "/placeholder.svg?height=300&width=300",
-      gradient: "bg-gradient-tertiary",
+      gradient: "bg-gradient-to-r from-pink-500 to-red-500",
     },
     {
       name: "David Kim",
       role: "Head of Growth",
       bio: "Growth strategist focused on expanding our reach and impact in the global startup ecosystem.",
       image: "/placeholder.svg?height=300&width=300",
-      gradient: "bg-gradient-quaternary",
+      gradient: "bg-gradient-to-r from-green-500 to-blue-500",
+    },
+    {
+      name: "Priya Sharma",
+      role: "Head of Product Design",
+      bio: "Creative leader with a passion for user-centered design. Creating intuitive experiences that delight our users.",
+      image: "/placeholder.svg?height=300&width=300",
+      gradient: "bg-gradient-to-r from-orange-500 to-yellow-500",
+    },
+    {
+      name: "Alex Thompson",
+      role: "Head of Data Science",
+      bio: "Data scientist and ML engineer optimizing our matching algorithms to create perfect career connections.",
+      image: "/placeholder.svg?height=300&width=300",
+      gradient: "bg-gradient-to-r from-cyan-500 to-blue-500",
+    },
+    {
+      name: "Maria Garcia",
+      role: "Head of Community",
+      bio: "Community builder fostering meaningful relationships and creating valuable networking opportunities for our users.",
+      image: "/placeholder.svg?height=300&width=300",
+      gradient: "bg-gradient-to-r from-indigo-500 to-purple-500",
     },
   ]
 
@@ -137,50 +158,53 @@ export default function AboutPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-16">
-        <div className="absolute inset-0 gradient-bg" />
-
-        {/* Floating Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 20 }).map((_, i) => (
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-16 white-gradient-bg">
+        {/* Enhanced Floating Elements */}
+        <div className="absolute inset-0 overflow-hidden z-10">
+          {Array.from({ length: 15 }).map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-white/20 rounded-full"
+              className="absolute floating-orb"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
+                width: `${Math.random() * 5 + 3}px`,
+                height: `${Math.random() * 5 + 3}px`,
               }}
               animate={{
-                y: [0, -40, 0],
-                opacity: [0.2, 0.8, 0.2],
-                scale: [1, 1.2, 1],
+                y: [0, -35, 0],
+                x: [0, Math.random() * 25 - 12, 0],
+                opacity: [0.1, 0.4, 0.1],
+                scale: [1, 1.4, 1],
               }}
               transition={{
-                duration: 5 + Math.random() * 3,
+                duration: 7 + Math.random() * 3,
                 repeat: Number.POSITIVE_INFINITY,
-                delay: Math.random() * 3,
+                delay: Math.random() * 2,
+                ease: "easeInOut",
               }}
+              className="bg-gradient-to-r from-blue-400/40 via-purple-400/40 to-pink-400/40 rounded-full blur-sm"
             />
           ))}
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
             <motion.div variants={itemVariants}>
-              <Badge className="mb-4 bg-white/20 text-gray-800 dark:text-white border-white/30 hover:bg-white/30 transition-all duration-300">
+              <Badge className="mb-6 glass-card text-gray-800 hover:glass-card-hover transition-all duration-300 pulse-glow-white">
                 🚀 Transforming careers since 2020
               </Badge>
             </motion.div>
 
             <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold leading-tight">
-              <span className="bg-gradient-primary bg-clip-text text-transparent">About</span>
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">About</span>
               <br />
-              <span className="text-gray-800 dark:text-white">INTERLINK</span>
+              <span className="text-gray-800">INTERLINK</span>
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
-              className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-light"
             >
               We're on a mission to revolutionize how talented individuals connect with innovative startups, creating
               opportunities that transform careers and accelerate business growth.
@@ -190,7 +214,7 @@ export default function AboutPage() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 py-4 text-lg bg-gradient-primary hover:scale-105 transition-all duration-300 pulse-glow rounded-full group"
+                className="px-8 py-4 text-lg btn-gradient-minimal hover:scale-105 transition-all duration-300 pulse-glow-white rounded-full group shadow-lg"
               >
                 <Link href="#mission">
                   Our Mission
@@ -201,7 +225,7 @@ export default function AboutPage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="px-8 py-4 text-lg glass-effect border-white/30 hover:bg-white/20 transition-all duration-300 rounded-full bg-transparent"
+                className="px-8 py-4 text-lg btn-glass rounded-full text-gray-700 hover:text-gray-900"
               >
                 <Link href="#team">Meet the Team</Link>
               </Button>
@@ -211,7 +235,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -224,18 +248,18 @@ export default function AboutPage() {
               <motion.div
                 key={stat.label}
                 variants={itemVariants}
-                whileHover={{ y: -5, scale: 1.02 }}
+                whileHover={{ y: -8, scale: 1.03 }}
                 className="group"
               >
-                <Card className="text-center glass-effect border-white/20 hover:border-white/40 transition-all duration-300">
+                <Card className="text-center glass-card hover:glass-card-hover transition-all duration-300 border-0 shadow-lg">
                   <CardContent className="p-8">
-                    <div className="w-12 h-12 mx-auto mb-4 bg-gradient-primary rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       {stat.icon}
                     </div>
-                    <div className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
+                    <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
                       {stat.number}
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400 font-medium">{stat.label}</p>
+                    <p className="text-gray-700 font-semibold">{stat.label}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -245,7 +269,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section id="mission" className="py-24 px-4 sm:px-6 lg:px-8 gradient-bg">
+      <section id="mission" className="py-24 px-4 sm:px-6 lg:px-8 white-gradient-bg">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -446,29 +470,29 @@ export default function AboutPage() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
             variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
           >
             {team.map((member, index) => (
               <motion.div
                 key={member.name}
                 variants={itemVariants}
-                whileHover={{ y: -10, scale: 1.02 }}
+                whileHover={{ y: -12, scale: 1.03 }}
                 className="group"
               >
-                <Card className="h-full glass-effect border-white/20 hover:border-white/40 transition-all duration-300 overflow-hidden">
+                <Card className="h-full glass-card hover:glass-card-hover transition-all duration-300 overflow-hidden border-0 shadow-lg">
                   <CardContent className="p-6 text-center">
                     <div className="relative mb-6">
-                      <div className={`w-24 h-24 mx-auto rounded-2xl ${member.gradient} p-1`}>
+                      <div className={`w-24 h-24 mx-auto rounded-2xl ${member.gradient} p-1 shadow-lg`}>
                         <div className="w-full h-full rounded-2xl bg-white/20 flex items-center justify-center text-white font-bold text-2xl">
                           {member.name.charAt(0)}
                         </div>
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-1">{member.name}</h3>
-                    <p className="text-sm font-medium bg-gradient-primary bg-clip-text text-transparent mb-4">
+                    <h3 className="text-xl font-bold text-gray-800 mb-1">{member.name}</h3>
+                    <p className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
                       {member.role}
                     </p>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{member.bio}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p>
                   </CardContent>
                 </Card>
               </motion.div>

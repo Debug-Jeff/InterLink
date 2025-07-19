@@ -9,6 +9,7 @@ require('express-async-errors');
 require('dotenv').config();
 
 const { logger, errorLogger } = require('./config/logger');
+const { keepAlive } = require('../keep-alive');
 const { rateLimiter } = require('./middleware/rateLimiter');
 const { errorHandler } = require('./middleware/errorHandler');
 const { notFoundHandler } = require('./middleware/notFoundHandler');
@@ -126,6 +127,11 @@ if (!fs.existsSync(uploadsDir)) {
 const server = app.listen(PORT, () => {
     logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
     console.log(`🚀 Server running on http://localhost:${PORT}`);
+    
+    // Initialize keep-alive service for production
+    if (process.env.NODE_ENV === 'production') {
+        keepAlive();
+    }
 });
 
 //Graceful shutdown for server
@@ -137,7 +143,7 @@ const shutdown = () => {
   });
 
   setTimeout(() => {
-    LogError.error('Force shutdown after 10 seconds');
+    logger.error('Force shutdown after 10 seconds');
     process.exit(1);
   }, 10000);
 };

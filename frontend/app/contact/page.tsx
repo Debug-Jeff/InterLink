@@ -206,50 +206,53 @@ export default function ContactPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-16">
-        <div className="absolute inset-0 gradient-bg" />
-
-        {/* Floating Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 12 }).map((_, i) => (
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-16 white-gradient-bg">
+        {/* Enhanced Floating Elements */}
+        <div className="absolute inset-0 overflow-hidden z-10">
+          {Array.from({ length: 10 }).map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-3 h-3 bg-white/20 rounded-full"
+              className="absolute floating-orb"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
+                width: `${Math.random() * 5 + 3}px`,
+                height: `${Math.random() * 5 + 3}px`,
               }}
               animate={{
-                y: [0, -50, 0],
-                opacity: [0.2, 0.8, 0.2],
-                scale: [1, 1.5, 1],
+                y: [0, -40, 0],
+                x: [0, Math.random() * 20 - 10, 0],
+                opacity: [0.15, 0.4, 0.15],
+                scale: [1, 1.4, 1],
               }}
               transition={{
-                duration: 6 + Math.random() * 2,
+                duration: 7 + Math.random() * 2,
                 repeat: Number.POSITIVE_INFINITY,
                 delay: Math.random() * 2,
+                ease: "easeInOut",
               }}
+              className="bg-gradient-to-r from-green-400/30 via-blue-400/30 to-purple-400/30 rounded-full blur-sm"
             />
           ))}
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
             <motion.div variants={itemVariants}>
-              <Badge className="mb-4 bg-white/20 text-gray-800 dark:text-white border-white/30 hover:bg-white/30 transition-all duration-300">
+              <Badge className="mb-6 glass-card text-gray-800 hover:glass-card-hover transition-all duration-300 pulse-glow-white">
                 💬 We're here to help 24/7
               </Badge>
             </motion.div>
 
             <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold leading-tight">
-              <span className="bg-gradient-primary bg-clip-text text-transparent">Get in</span>
+              <span className="bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">Get in</span>
               <br />
-              <span className="text-gray-800 dark:text-white">Touch</span>
+              <span className="text-gray-800">Touch</span>
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
-              className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-light"
             >
               Have questions about our services? Ready to start your journey? Our team is here to help you every step of
               the way.
@@ -259,7 +262,7 @@ export default function ContactPage() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 py-4 text-lg bg-gradient-primary hover:scale-105 transition-all duration-300 pulse-glow rounded-full group"
+                className="px-8 py-4 text-lg btn-gradient-minimal hover:scale-105 transition-all duration-300 pulse-glow-white rounded-full group shadow-lg"
               >
                 <Link href="#contact-form">
                   <Send className="mr-2 w-5 h-5" />
@@ -271,7 +274,7 @@ export default function ContactPage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="px-8 py-4 text-lg glass-effect border-white/30 hover:bg-white/20 transition-all duration-300 rounded-full bg-transparent"
+                className="px-8 py-4 text-lg btn-glass rounded-full text-gray-700 hover:text-gray-900"
               >
                 <Link href="#faq">View FAQ</Link>
               </Button>
@@ -281,7 +284,7 @@ export default function ContactPage() {
       </section>
 
       {/* Quick Stats */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -303,7 +306,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Methods */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 gradient-bg">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 white-gradient-bg">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -361,7 +364,7 @@ export default function ContactPage() {
       {/* Contact Form */}
       <section
         id="contact-form"
-        className="py-24 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm"
+        className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50/50"
       >
         <div className="max-w-4xl mx-auto">
           <motion.div
@@ -513,7 +516,7 @@ export default function ContactPage() {
       </section>
 
       {/* Office Hours & Info */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 gradient-bg">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 white-gradient-bg">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -605,7 +608,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-24 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+      <section id="faq" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial="hidden"
@@ -657,7 +660,7 @@ export default function ContactPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 gradient-bg">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 white-gradient-bg">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial="hidden"

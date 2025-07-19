@@ -103,51 +103,89 @@ export default function HomePage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        <div className="absolute inset-0 gradient-bg" />
-
-        {/* Floating Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 15 }).map((_, i) => (
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 white-gradient-bg">
+        {/* Enhanced Floating Elements */}
+        <div className="absolute inset-0 overflow-hidden z-10">
+          {Array.from({ length: 12 }).map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-white/20 rounded-full"
+              className="absolute floating-orb"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
+                width: `${Math.random() * 6 + 4}px`,
+                height: `${Math.random() * 6 + 4}px`,
               }}
               animate={{
-                y: [0, -30, 0],
-                opacity: [0.2, 0.8, 0.2],
+                y: [0, -40, 0],
+                x: [0, Math.random() * 30 - 15, 0],
+                opacity: [0.1, 0.3, 0.1],
+                scale: [1, 1.5, 1],
               }}
               transition={{
-                duration: 4 + Math.random() * 2,
+                duration: 8 + Math.random() * 4,
                 repeat: Number.POSITIVE_INFINITY,
-                delay: Math.random() * 2,
+                delay: Math.random() * 3,
+                ease: "easeInOut",
               }}
+              className="bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 rounded-full blur-sm"
             />
           ))}
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* Decorative glass shapes */}
+        <div className="absolute inset-0 overflow-hidden z-10">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <motion.div
+              key={`glass-${i}`}
+              className="absolute glass-card"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${Math.random() * 100 + 50}px`,
+                height: `${Math.random() * 100 + 50}px`,
+              }}
+              animate={{
+                rotate: [0, 360],
+                scale: [1, 1.1, 1],
+                opacity: [0.1, 0.2, 0.1],
+              }}
+              transition={{
+                duration: 15 + Math.random() * 5,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+                delay: i * 2,
+              }}
+              className="rounded-full"
+            />
+          ))}
+        </div>
+
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
             <motion.div variants={itemVariants}>
-              <Badge className="mb-4 bg-white/20 text-gray-800 dark:text-white border-white/30 hover:bg-white/30 transition-all duration-300">
-                🚀 Now connecting 10,000+ professionals
+              <Badge className="mb-6 glass-card text-gray-800 hover:glass-card-hover transition-all duration-300 pulse-glow-white">
+                ✨ Now connecting 10,000+ professionals worldwide
               </Badge>
             </motion.div>
 
             <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
-              <span className="bg-gradient-primary bg-clip-text text-transparent">Connect.</span>
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Connect.
+              </span>
               <br />
-              <span className="bg-gradient-secondary bg-clip-text text-transparent">Create.</span>
+              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent">
+                Create.
+              </span>
               <br />
-              <span className="bg-gradient-tertiary bg-clip-text text-transparent">Succeed.</span>
+              <span className="bg-gradient-to-r from-pink-600 via-red-500 to-yellow-500 bg-clip-text text-transparent">
+                Succeed.
+              </span>
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
-              className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-light"
             >
               Bridge the gap between ambitious talent and innovative startups. Your next career breakthrough starts
               here.
@@ -157,7 +195,7 @@ export default function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 py-4 text-lg bg-gradient-primary hover:scale-105 transition-all duration-300 pulse-glow rounded-full group"
+                className="px-8 py-4 text-lg btn-gradient-minimal hover:scale-105 transition-all duration-300 pulse-glow-white rounded-full group shadow-lg"
               >
                 <Link href="/signup">
                   Start Your Journey
@@ -168,7 +206,7 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="px-8 py-4 text-lg glass-effect border-white/30 hover:bg-white/20 transition-all duration-300 rounded-full bg-transparent"
+                className="px-8 py-4 text-lg btn-glass rounded-full text-gray-700 hover:text-gray-900"
               >
                 <Link href="/about">Learn More</Link>
               </Button>
@@ -182,14 +220,14 @@ export default function HomePage() {
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
-                  className="text-center glass-effect p-6 rounded-2xl hover:scale-105 transition-all duration-300"
-                  whileHover={{ y: -5 }}
+                  className="text-center glass-card p-6 rounded-2xl hover:glass-card-hover hover:scale-105 transition-all duration-300"
+                  whileHover={{ y: -8 }}
                 >
-                  <div className="flex justify-center mb-2 text-gray-600 dark:text-gray-400">{stat.icon}</div>
-                  <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                  <div className="flex justify-center mb-3 text-blue-500">{stat.icon}</div>
+                  <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     {stat.number}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
+                  <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -198,8 +236,8 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 white-gradient-bg">
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -209,11 +247,11 @@ export default function HomePage() {
           >
             <motion.h2
               variants={itemVariants}
-              className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent"
+              className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
             >
               Why Choose INTERLINK?
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            <motion.p variants={itemVariants} className="text-xl text-gray-700 max-w-3xl mx-auto font-light">
               We're revolutionizing how talent connects with opportunity through cutting-edge technology and human
               insight.
             </motion.p>
@@ -230,20 +268,18 @@ export default function HomePage() {
               <motion.div
                 key={feature.title}
                 variants={itemVariants}
-                whileHover={{ y: -10, scale: 1.02 }}
+                whileHover={{ y: -12, scale: 1.03 }}
                 className="group"
               >
-                <Card className="h-full glass-effect border-white/20 hover:border-white/40 transition-all duration-300 overflow-hidden">
+                <Card className="h-full glass-card hover:glass-card-hover transition-all duration-300 overflow-hidden border-0 shadow-lg">
                   <CardHeader className="text-center pb-4">
-                    <div
-                      className={`w-16 h-16 mx-auto rounded-2xl ${feature.gradient} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
+                    <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       {feature.icon}
                     </div>
-                    <CardTitle className="text-xl font-semibold">{feature.title}</CardTitle>
+                    <CardTitle className="text-xl font-bold text-gray-800">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{feature.description}</p>
+                    <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -253,7 +289,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 gradient-bg">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -264,11 +300,11 @@ export default function HomePage() {
           >
             <motion.h2
               variants={itemVariants}
-              className="text-4xl md:text-5xl font-bold mb-6 text-gray-800 dark:text-white"
+              className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent"
             >
               Success Stories
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <motion.p variants={itemVariants} className="text-xl text-gray-700 max-w-3xl mx-auto font-light">
               Hear from the professionals and companies who've transformed their futures through INTERLINK.
             </motion.p>
           </motion.div>
@@ -281,28 +317,24 @@ export default function HomePage() {
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             {testimonials.map((testimonial, index) => (
-              <motion.div key={testimonial.name} variants={itemVariants} whileHover={{ y: -5 }} className="group">
-                <Card className="h-full glass-effect border-white/30 hover:border-white/50 transition-all duration-300">
+              <motion.div key={testimonial.name} variants={itemVariants} whileHover={{ y: -8 }} className="group">
+                <Card className="h-full glass-card hover:glass-card-hover transition-all duration-300 border-0 shadow-lg">
                   <CardContent className="p-6">
                     <div className="flex items-center mb-4">
                       {Array.from({ length: testimonial.rating }).map((_, i) => (
-                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                        <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
                       ))}
                     </div>
-                    <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed italic">
+                    <p className="text-gray-700 mb-6 leading-relaxed italic font-medium">
                       "{testimonial.content}"
                     </p>
                     <div className="flex items-center">
-                      <Image
-                        src={testimonial.avatar || "/placeholder.svg"}
-                        alt={testimonial.name}
-                        width={48}
-                        height={48}
-                        className="rounded-full mr-4"
-                      />
+                      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                        {testimonial.name.charAt(0)}
+                      </div>
                       <div>
-                        <h4 className="font-semibold text-gray-800 dark:text-white">{testimonial.name}</h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <h4 className="font-bold text-gray-800">{testimonial.name}</h4>
+                        <p className="text-sm text-gray-600 font-medium">
                           {testimonial.role} at {testimonial.company}
                         </p>
                       </div>
@@ -316,8 +348,8 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 white-gradient-bg">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -327,11 +359,11 @@ export default function HomePage() {
           >
             <motion.h2
               variants={itemVariants}
-              className="text-4xl md:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent"
+              className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 via-red-500 to-yellow-500 bg-clip-text text-transparent"
             >
               Ready to Transform Your Future?
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <motion.p variants={itemVariants} className="text-xl text-gray-700 max-w-2xl mx-auto font-light">
               Join thousands of professionals who've already discovered their perfect match. Your next opportunity is
               just one click away.
             </motion.p>
@@ -339,7 +371,7 @@ export default function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 py-4 text-lg bg-gradient-primary hover:scale-105 transition-all duration-300 pulse-glow rounded-full group"
+                className="px-8 py-4 text-lg btn-gradient-minimal hover:scale-105 transition-all duration-300 pulse-glow-white rounded-full group shadow-lg"
               >
                 <Link href="/signup">
                   <GraduationCap className="mr-2 w-5 h-5" />
@@ -350,7 +382,7 @@ export default function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 py-4 text-lg bg-gradient-secondary hover:scale-105 transition-all duration-300 pulse-glow rounded-full group"
+                className="px-8 py-4 text-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 transition-all duration-300 pulse-glow-white rounded-full group shadow-lg"
               >
                 <Link href="/signup">
                   <Briefcase className="mr-2 w-5 h-5" />

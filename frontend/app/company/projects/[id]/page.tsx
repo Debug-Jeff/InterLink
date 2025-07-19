@@ -1,6 +1,5 @@
 "use client"
 
-import { getProjectById, getAllClients } from "@/lib/data"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CalendarDays, DollarSign, FileText, User, Edit } from "lucide-react"
@@ -17,9 +16,26 @@ import { useActionState } from "react"
 import { updateProject } from "@/app/company/project-actions"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
 
-// Define types for data fetched from server
-type ProjectItem = Awaited<ReturnType<typeof getProjectById>>
+// Define types for client-side data
+type ProjectItem = {
+  id: string
+  name: string
+  description: string | null
+  status: string
+  start_date: string | null
+  end_date: string | null
+  budget: number | null
+  client_id: string | null
+  company_id: string
+  clients?: {
+    name: string
+    contact_email: string
+    contact_person: string
+  }
+} | null
+
 type ClientOption = { id: string; name: string }
 
 interface ProjectDetailPageProps {
@@ -33,6 +49,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const [project, setProject] = useState<ProjectItem>(null)
   const [clients, setClients] = useState<ClientOption[]>([])
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
 
   // Action state for update form
   const [updateState, updateAction, updatePending] = useActionState(updateProject, null)
@@ -40,17 +58,51 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   // Fetch data on component mount and when ID changes
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedProject = await getProjectById(params.id)
-      const fetchedClients = await getAllClients(fetchedProject?.company_id || "") // Assuming company_id is available or fetched separately
-      if (fetchedProject) {
-        setProject(fetchedProject)
-      } else {
-        notFound()
+      try {
+        // Get current authenticated user
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+        
+        if (userError || !user) {
+          router.push("/signin")
+          return
+        }
+
+        // Fetch project by ID with client details
+        const { data: projectData, error: projectError } = await supabase
+          .from('projects')
+          .select('*, clients(name, contact_email, contact_person)')
+          .eq('id', params.id)
+          .eq('company_id', user.id)
+          .single()
+
+        if (projectError || !projectData) {
+          notFound()
+          return
+        }
+
+        setProject(projectData)
+
+        // Fetch all clients for the dropdown
+        const { data: clientsData, error: clientsError } = await supabase
+          .from('clients')
+          .select('id, name')
+          .eq('company_id', user.id)
+          .order('name', { ascending: true })
+
+        if (clientsError) {
+          console.error('Error fetching clients:', clientsError)
+          setClients([])
+        } else {
+          setClients(clientsData || [])
+        }
+      } catch (error) {
+        console.error('Error in fetchData:', error)
+      } finally {
+        setLoading(false)
       }
-      setClients(fetchedClients.map((c) => ({ id: c.id, name: c.name })))
     }
     fetchData()
-  }, [params.id])
+  }, [params.id, router, supabase])
 
   // Handle update success/error
   useEffect(() => {
@@ -68,8 +120,15 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     }
   }, [updateState, router])
 
-  if (!project) {
-    return null // Or a loading spinner, notFound() is handled in useEffect
+  if (loading || !project) {
+    return (
+      <div className="p-8 bg-white rounded-xl shadow-md border border-gray-100 text-center text-gray-500">
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
+          Loading project details...
+        </div>
+      </div>
+    )
   }
 
   return (

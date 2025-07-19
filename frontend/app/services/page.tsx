@@ -210,49 +210,53 @@ export default function ServicesPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-16">
-        <div className="absolute inset-0 gradient-bg" />
-
-        {/* Floating Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 15 }).map((_, i) => (
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-16 white-gradient-bg">
+        {/* Enhanced Floating Elements */}
+        <div className="absolute inset-0 overflow-hidden z-10">
+          {Array.from({ length: 12 }).map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-white/20 rounded-full"
+              className="absolute floating-orb"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
+                width: `${Math.random() * 4 + 3}px`,
+                height: `${Math.random() * 4 + 3}px`,
               }}
               animate={{
                 y: [0, -30, 0],
-                opacity: [0.2, 0.8, 0.2],
+                x: [0, Math.random() * 20 - 10, 0],
+                opacity: [0.1, 0.3, 0.1],
+                scale: [1, 1.3, 1],
               }}
               transition={{
-                duration: 4 + Math.random() * 2,
+                duration: 6 + Math.random() * 3,
                 repeat: Number.POSITIVE_INFINITY,
                 delay: Math.random() * 2,
+                ease: "easeInOut",
               }}
+              className="bg-gradient-to-r from-indigo-400/30 via-purple-400/30 to-pink-400/30 rounded-full blur-sm"
             />
           ))}
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
             <motion.div variants={itemVariants}>
-              <Badge className="mb-4 bg-white/20 text-gray-800 dark:text-white border-white/30 hover:bg-white/30 transition-all duration-300">
+              <Badge className="mb-6 glass-card text-gray-800 hover:glass-card-hover transition-all duration-300 pulse-glow-white">
                 ⚡ Powering 1,200+ successful connections monthly
               </Badge>
             </motion.div>
 
             <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold leading-tight">
-              <span className="bg-gradient-primary bg-clip-text text-transparent">Services That</span>
+              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">Services That</span>
               <br />
-              <span className="text-gray-800 dark:text-white">Transform Careers</span>
+              <span className="text-gray-800">Transform Careers</span>
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
-              className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-light"
             >
               Comprehensive solutions designed to connect ambitious talent with innovative startups. Whether you're
               building your career or building your team, we have the tools you need to succeed.
@@ -262,7 +266,7 @@ export default function ServicesPage() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 py-4 text-lg bg-gradient-primary hover:scale-105 transition-all duration-300 pulse-glow rounded-full group"
+                className="px-8 py-4 text-lg btn-gradient-minimal hover:scale-105 transition-all duration-300 pulse-glow-white rounded-full group shadow-lg"
               >
                 <Link href="#intern-services">
                   <GraduationCap className="mr-2 w-5 h-5" />
@@ -273,7 +277,7 @@ export default function ServicesPage() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 py-4 text-lg bg-gradient-secondary hover:scale-105 transition-all duration-300 pulse-glow rounded-full group"
+                className="px-8 py-4 text-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 transition-all duration-300 pulse-glow-white rounded-full group shadow-lg"
               >
                 <Link href="#startup-services">
                   <Briefcase className="mr-2 w-5 h-5" />
@@ -289,7 +293,7 @@ export default function ServicesPage() {
       {/* Intern Services */}
       <section
         id="intern-services"
-        className="py-24 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm"
+        className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50/50"
       >
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -301,11 +305,11 @@ export default function ServicesPage() {
           >
             <motion.h2
               variants={itemVariants}
-              className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent"
+              className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
             >
               For Ambitious Interns
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            <motion.p variants={itemVariants} className="text-xl text-gray-700 max-w-3xl mx-auto font-light">
               Unlock your potential with our comprehensive suite of career development tools and opportunities.
             </motion.p>
           </motion.div>
@@ -321,29 +325,27 @@ export default function ServicesPage() {
               <motion.div
                 key={service.title}
                 variants={itemVariants}
-                whileHover={{ y: -10, scale: 1.02 }}
+                whileHover={{ y: -12, scale: 1.03 }}
                 className="group"
               >
-                <Card className="h-full glass-effect border-white/20 hover:border-white/40 transition-all duration-300 overflow-hidden">
+                <Card className="h-full glass-card hover:glass-card-hover transition-all duration-300 overflow-hidden border-0 shadow-lg">
                   <CardHeader className="pb-4">
                     <div className="flex items-center space-x-4 mb-4">
-                      <div
-                        className={`w-12 h-12 rounded-xl ${service.gradient} flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300`}
-                      >
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300 shadow-lg">
                         {service.icon}
                       </div>
-                      <CardTitle className="text-2xl font-bold text-gray-800 dark:text-white">
+                      <CardTitle className="text-2xl font-bold text-gray-800">
                         {service.title}
                       </CardTitle>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{service.description}</p>
+                    <p className="text-gray-600 leading-relaxed">{service.description}</p>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-3">
                       {service.features.map((feature, i) => (
                         <li key={i} className="flex items-center space-x-3">
                           <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                          <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                          <span className="text-gray-700">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -356,7 +358,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Startup Services */}
-      <section id="startup-services" className="py-24 px-4 sm:px-6 lg:px-8 gradient-bg">
+      <section id="startup-services" className="py-24 px-4 sm:px-6 lg:px-8 white-gradient-bg">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -422,7 +424,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -499,7 +501,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 gradient-bg">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 white-gradient-bg">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -558,7 +560,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial="hidden"

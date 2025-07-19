@@ -8,31 +8,70 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useActionState } from "react"
 import { updateCompanyProfile } from "@/app/company/actions" // Import the new server action
-import { getAuthenticatedUser, getCompanyProfile } from "@/lib/data" // Import data fetching functions
 import { useToast } from "@/hooks/use-toast" // Assuming you have a toast hook
 import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 
-// Define types for data fetched from server
-type CompanyProfile = Awaited<ReturnType<typeof getCompanyProfile>>
+// Define types for client-side data
+type CompanyProfile = {
+  id: string
+  email: string
+  full_name: string | null
+  first_name: string | null
+  last_name: string | null
+  phone: string | null
+  bio: string | null
+  location: string | null
+  website: string | null
+  user_metadata?: {
+    phone_number?: string
+  }
+} | null
 
 export default function CompanyProfileSettingsPage() {
   const router = useRouter()
   const { toast } = useToast()
   const [companyProfile, setCompanyProfile] = useState<CompanyProfile>(null)
+  const [loading, setLoading] = useState(true)
   const [state, formAction, isPending] = useActionState(updateCompanyProfile, null)
+  const supabase = createClient()
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const authUser = await getAuthenticatedUser()
-      if (authUser) {
-        const profile = await getCompanyProfile(authUser.id)
-        setCompanyProfile(profile)
-      } else {
-        router.push("/signin") // Redirect if not authenticated
+      try {
+        // Get current authenticated user
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+        
+        if (userError || !user) {
+          router.push("/signin")
+          return
+        }
+
+        // Fetch company profile from users table
+        const { data: profile, error: profileError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+
+        if (profileError) {
+          console.error('Error fetching company profile:', profileError)
+          toast({
+            title: "Error",
+            description: "Failed to load profile",
+            variant: "destructive",
+          })
+        } else {
+          setCompanyProfile(profile)
+        }
+      } catch (error) {
+        console.error('Error in fetchProfile:', error)
+      } finally {
+        setLoading(false)
       }
     }
     fetchProfile()
-  }, [router])
+  }, [router, supabase, toast])
 
   useEffect(() => {
     if (state?.message) {
@@ -44,21 +83,31 @@ export default function CompanyProfileSettingsPage() {
       if (state.success) {
         // Re-fetch profile to update local state with latest data
         const fetchUpdatedProfile = async () => {
-          const authUser = await getAuthenticatedUser()
-          if (authUser) {
-            const profile = await getCompanyProfile(authUser.id)
+          const { data: { user }, error: userError } = await supabase.auth.getUser()
+          if (userError || !user) return
+          
+          const { data: profile, error: profileError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', user.id)
+            .single()
+            
+          if (!profileError && profile) {
             setCompanyProfile(profile)
           }
         }
         fetchUpdatedProfile()
       }
     }
-  }, [state, toast])
+  }, [state, toast, supabase])
 
-  if (!companyProfile) {
+  if (loading || !companyProfile) {
     return (
       <div className="p-8 bg-white rounded-xl shadow-md border border-gray-100 text-center text-gray-500">
-        Loading company profile...
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
+          Loading company profile...
+        </div>
       </div>
     )
   }

@@ -4,59 +4,125 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useActionState, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { updateUserProfile } from "@/app/(auth)/actions"
 import { useToast } from "@/components/ui/use-toast"
-import { getAuthenticatedUser, getUserProfile } from "@/lib/data" // Import server-side data fetching
+import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
-// Define types for data fetched from server
-type UserProfile = Awaited<ReturnType<typeof getUserProfile>>
+// Define types for user profile
+type UserProfile = {
+  id: string
+  email: string
+  full_name: string | null
+  first_name: string | null
+  last_name: string | null
+  phone: string | null
+  bio: string | null
+  location: string | null
+  website: string | null
+}
 
 export default function UserProfilePage() {
   const router = useRouter()
   const { toast } = useToast()
-  const [userProfile, setUserProfile] = useState<UserProfile>(null)
-  const [state, formAction, isPending] = useActionState(updateUserProfile, null)
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const supabase = createClient()
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const authUser = await getAuthenticatedUser()
-      if (authUser) {
-        const profile = await getUserProfile(authUser.id)
-        setUserProfile(profile)
-      } else {
-        router.push("/signin") // Redirect if not authenticated
-      }
-    }
-    fetchProfile()
-  }, [router])
-
-  useEffect(() => {
-    if (state?.message) {
-      toast({
-        title: state.success ? "Success!" : "Error",
-        description: state.message,
-        variant: state.success ? "default" : "destructive",
-      })
-      if (state.success) {
-        // Re-fetch profile to update local state with latest data
-        const fetchUpdatedProfile = async () => {
-          const authUser = await getAuthenticatedUser()
-          if (authUser) {
-            const profile = await getUserProfile(authUser.id)
-            setUserProfile(profile)
-          }
+      try {
+        // Get current authenticated user
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+        
+        if (userError || !user) {
+          router.push("/signin")
+          return
         }
-        fetchUpdatedProfile()
+
+        // Fetch user profile from users table
+        const { data: profile, error: profileError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+
+        if (profileError) {
+          console.error('Error fetching profile:', profileError)
+          toast({
+            title: "Error",
+            description: "Failed to load profile",
+            variant: "destructive",
+          })
+        } else {
+          setUserProfile(profile)
+        }
+      } catch (error) {
+        console.error('Error in fetchProfile:', error)
+      } finally {
+        setLoading(false)
       }
     }
-  }, [state, toast])
 
-  if (!userProfile) {
+    fetchProfile()
+  }, [router, supabase, toast])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!userProfile) return
+
+    setSaving(true)
+    try {
+      const formData = new FormData(e.currentTarget)
+      
+      const updateData = {
+        first_name: formData.get('firstName') as string,
+        last_name: formData.get('lastName') as string,
+        phone: formData.get('phone') as string,
+        bio: formData.get('bio') as string,
+        location: formData.get('location') as string,
+        website: formData.get('website') as string,
+      }
+
+      const { error } = await supabase
+        .from('users')
+        .update(updateData)
+        .eq('id', userProfile.id)
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to update profile",
+          variant: "destructive",
+        })
+      } else {
+        setUserProfile(prev => prev ? { ...prev, ...updateData } : null)
+        toast({
+          title: "Success",
+          description: "Profile updated successfully",
+        })
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error)
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading || !userProfile) {
     return (
       <div className="p-8 bg-white rounded-xl shadow-md border border-gray-100 text-center text-gray-500">
-        Loading profile...
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
+          Loading profile...
+        </div>
       </div>
     )
   }
@@ -71,35 +137,67 @@ export default function UserProfilePage() {
           <CardTitle className="text-xl font-bold text-gray-800">Profile Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <form action={formAction} className="grid gap-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullName" className="md:text-right">
-                Full Name
-              </Label>
-              <Input
-                id="fullName"
-                name="fullName"
-                defaultValue={userProfile.full_name || ""}
-                className="col-span-3"
-                required
-              />
+          <form onSubmit={handleSubmit} className="grid gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="firstName">First Name</Label>
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  defaultValue={userProfile.first_name || ""}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  defaultValue={userProfile.last_name || ""}
+                  required
+                />
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="md:text-right">
-                Email
-              </Label>
+            <div>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                defaultValue={userProfile.email || ""}
-                className="col-span-3"
-                required
+                value={userProfile.email}
+                disabled
+                className="bg-gray-50"
+              />
+            </div>
+            <div>
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                defaultValue={userProfile.phone || ""}
+              />
+            </div>
+            <div>
+              <Label htmlFor="location">Location</Label>
+              <Input
+                id="location"
+                name="location"
+                defaultValue={userProfile.location || ""}
+              />
+            </div>
+            <div>
+              <Label htmlFor="website">Website</Label>
+              <Input
+                id="website"
+                name="website"
+                type="url"
+                defaultValue={userProfile.website || ""}
               />
             </div>
             <div className="flex justify-end">
-              <Button type="submit" disabled={isPending}>
-                {isPending ? "Saving..." : "Save Changes"}
+              <Button type="submit" disabled={saving}>
+                {saving ? "Saving..." : "Save Changes"}
               </Button>
             </div>
           </form>

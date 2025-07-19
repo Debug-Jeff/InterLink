@@ -111,7 +111,7 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+      <div className="flex-1 flex items-center justify-center p-8 white-gradient-bg">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -257,7 +257,7 @@ export default function SignInPage() {
       </div>
 
       {/* Right Side - Benefits */}
-      <div className="hidden lg:flex flex-1 items-center justify-center p-8 gradient-bg relative overflow-hidden">
+      <div className="hidden lg:flex flex-1 items-center justify-center p-8 bg-slate-50/70 relative overflow-hidden">
         {/* Floating Elements */}
         <div className="absolute inset-0 overflow-hidden">
           {Array.from({ length: 10 }).map((_, i) => (

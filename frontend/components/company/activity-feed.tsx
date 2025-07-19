@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { MessageSquare, FolderCheck, UserPlus } from "lucide-react"
 import React, { useEffect, useState } from "react"
-import { subscribeToCompanyActivity } from "@/lib/data" // Import real-time subscription
+import { createClient } from "@/lib/supabase/client"
 
 interface ActivityItem {
   id: string
@@ -15,21 +15,68 @@ interface ActivityItem {
 
 export function ActivityFeed() {
   const [activities, setActivities] = useState<ActivityItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
 
   useEffect(() => {
-    // For initial load, you might fetch existing activities
-    // For now, we'll just rely on real-time updates or start with an empty array
-    // In a real app, you'd fetch initial data here:
-    // const fetchInitialActivities = async () => { ... }
-    // fetchInitialActivities()
+    const fetchInitialActivities = async () => {
+      try {
+        // Get current authenticated user
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+        
+        if (userError || !user) {
+          return
+        }
 
-    const unsubscribe = subscribeToCompanyActivity((newActivity) => {
-      // Add new activity to the top of the list
-      setActivities((prevActivities) => [newActivity, ...prevActivities])
-    })
+        // Fetch initial company activities
+        const { data: activitiesData, error: activitiesError } = await supabase
+          .from('company_activities')
+          .select('*')
+          .eq('company_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(10)
 
-    return () => unsubscribe()
-  }, [])
+        if (activitiesError) {
+          console.error('Error fetching activities:', activitiesError)
+        } else {
+          // Transform data to match ActivityItem interface
+          const transformedActivities = (activitiesData || []).map(activity => ({
+            id: activity.id,
+            type: activity.type as ActivityItem["type"],
+            description: activity.description,
+            timestamp: new Date(activity.created_at).toLocaleString()
+          }))
+          setActivities(transformedActivities)
+        }
+      } catch (error) {
+        console.error('Error in fetchInitialActivities:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchInitialActivities()
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('company_activity_feed')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'company_activities' }, (payload) => {
+        if (payload.new) {
+          const newActivity = {
+            id: payload.new.id,
+            type: payload.new.type as ActivityItem["type"],
+            description: payload.new.description,
+            timestamp: new Date(payload.new.created_at).toLocaleString()
+          }
+          setActivities((prevActivities) => [newActivity, ...prevActivities])
+        }
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [supabase])
 
   const getActivityIcon = (type: ActivityItem["type"]) => {
     switch (type) {
@@ -50,7 +97,14 @@ export function ActivityFeed() {
         <CardTitle className="text-xl font-bold text-gray-800">Recent Company Activity</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        {activities.length > 0 ? (
+        {loading ? (
+          <div className="p-4 text-center text-gray-500">
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-2"></div>
+              Loading activities...
+            </div>
+          </div>
+        ) : activities.length > 0 ? (
           activities.map((activity, index) => (
             <React.Fragment key={activity.id}>
               <div className="flex items-start gap-4 p-4 hover:bg-gray-50 transition-colors">
