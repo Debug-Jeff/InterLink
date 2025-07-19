@@ -2,7 +2,7 @@ const https = require('https');
 
 // Function to ping the server to keep it alive
 function keepAlive() {
-  const url = process.env.RENDER_EXTERNAL_URL || 'https://your-app-name.onrender.com';
+  const url = process.env.RENDER_EXTERNAL_URL || 'https://interlink-1lil.onrender.com';
   
   console.log(`Pinging ${url} to keep server alive...`);
   
