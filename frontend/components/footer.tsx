@@ -61,31 +61,43 @@ export function Footer() {
 
   return (
     <footer className="relative overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 gradient-bg opacity-90" />
+      {/* Enhanced Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 opacity-95" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+      
+      {/* Glassmorphism overlay */}
+      <div className="absolute inset-0 backdrop-blur-sm bg-white/5 dark:bg-black/5" />
 
-      {/* Floating Elements */}
+      {/* Enhanced Floating Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 10 }).map((_, i) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-white/30 rounded-full"
+            className="absolute rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
+              width: `${Math.random() * 4 + 1}px`,
+              height: `${Math.random() * 4 + 1}px`,
             }}
             animate={{
-              y: [0, -20, 0],
-              opacity: [0.3, 0.8, 0.3],
+              y: [0, -30, 0],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.2, 1],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: 4 + Math.random() * 3,
               repeat: Number.POSITIVE_INFINITY,
               delay: Math.random() * 2,
             }}
+            className="bg-gradient-to-r from-purple-400 via-blue-400 to-pink-400"
           />
         ))}
       </div>
+
+      {/* Decorative gradient orbs */}
+      <div className="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-3xl" />
+      <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-500/20 to-pink-500/20 rounded-full blur-3xl" />
 
       <div className="relative z-10">
         {/* Main Footer Content */}
