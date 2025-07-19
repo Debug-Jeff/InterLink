@@ -105,7 +105,7 @@ app.use(notFoundHandler);
 app.use(errorLogger);
 app.use(errorHandler);
 
-// Graceful shutdown
+// shutdown
 process.on('SIGTERM', () => {
   logger.info('SIGTERM received, shutting down gracefully');
   process.exit(0);
@@ -123,9 +123,26 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 // Start server
-app.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+const server = app.listen(PORT, () => {
+    logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+
+//Graceful shutdown for server
+const shutdown = () => {
+  logger.info('Shutting down server gracefully...');
+  server.close(() => {
+    logger.info('Server shut down successfully');
+    process.exit(0);
+  });
+
+  setTimeout(() => {
+    LogError.error('Force shutdown after 10 seconds');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
 
 module.exports = app;

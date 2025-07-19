@@ -82,15 +82,24 @@ typings/
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+# IDEs and editors
 kill-port.bat
+kill-port.sh
 database-setup.sql
+database-fixes.sql
+
+# Documentation
 developer-doc.md
+SECURITY_CLEANUP.md
+DEPLOYMENT_GUIDE.md
 # Uploads
 uploads/
 
 # Build output
 dist/
 build/
+
+outer-assets/
 
 # Claude settings
 .claude/
