@@ -85,7 +85,11 @@ typings/
 # IDEs and editors
 kill-port.bat
 kill-port.sh
-
+cleanup-backend.sh
+cleanup-backend.bat
+cleanup-frontend.bat
+cleanup-frontend.sh
+test-deployment.js
 # Uploads
 uploads/
 
