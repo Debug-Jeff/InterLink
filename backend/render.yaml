@@ -3,7 +3,7 @@ services:
     name: interlink-backend
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: cp package.deploy.json package.json && npm install --production
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
