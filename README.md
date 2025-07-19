@@ -1,356 +1,359 @@
-# InterLink - Complete Full-Stack Application
+# Interlink - Modern Business Management Platform
 
-InterLink is a comprehensive client management and project collaboration platform built with Next.js, Express.js, and Supabase.
+A comprehensive business management platform built with Next.js 15, featuring role-based dashboards, client management, project tracking, and modern UI/UX design.
+
+![Interlink Dashboard](https://via.placeholder.com/800x400/6366f1/ffffff?text=Interlink+Dashboard)
 
 ## 🚀 Features
 
-### 🔐 Authentication & Authorization
-- Role-based access control (Admin, Company, Client)
-- JWT token-based authentication
-- OAuth integration (Google, Facebook)
-- Password reset functionality
+### Multi-Role Dashboard System
+- **Admin Dashboard**: Complete system oversight and user management
+- **Company Dashboard**: Client and project management with analytics
+- **Client Dashboard**: Project tracking and communication tools
 
-### 👥 User Management
-- Complete CRUD operations for users
-- Profile management
-- Role-based permissions
-- Activity tracking
+### Core Functionality
+- **User Authentication**: Secure sign-up, sign-in, and password recovery
+- **Role-Based Access Control**: Admin, Company, and Client user types
+- **Client Management**: Complete CRUD operations for client data
+- **Project Management**: Project creation, tracking, and status updates
+- **Real-time Analytics**: Dashboard metrics and engagement tracking
+- **Responsive Design**: Mobile-first approach with glass morphism UI
+- **Dark/Light Mode**: System-wide theme switching
+- **Toast Notifications**: User feedback for all actions
 
-### 🏢 Client Management
-- Client registration and profiles
-- Company information management
-- Project association
-- Client-specific dashboards
+### Modern UI/UX
+- **Glass Morphism Design**: Modern frosted glass effects
+- **Gradient Backgrounds**: Beautiful animated gradient overlays
+- **Smooth Animations**: Framer Motion powered interactions
+- **Responsive Layout**: Works perfectly on all devices
+- **Accessibility**: WCAG compliant with proper ARIA labels
 
-### 📋 Project Management
-- Project creation and tracking
-- Status management (pending, in-progress, completed, cancelled)
-- File uploads and storage
-- Budget and timeline tracking
-
-### 📨 Communication
-- Real-time messaging system
-- Email notifications
-- Inquiry/contact form processing
-- Message history and conversations
-
-### 📊 Analytics & Reporting
-- Dashboard analytics
-- User engagement metrics
-- Financial reporting
-- Activity statistics
-
-### 🔄 Approval Workflows
-- Custom approval processes
-- Multi-level approvals
-- Status tracking
-- Automated notifications
-
-### 📁 File Management
-- File upload with Supabase Storage
-- Image thumbnail generation
-- File type validation
-- Project-specific file organization
-
-## 🛠 Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
-- **Next.js 15** - React framework
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Radix UI** - Component library
-- **React Hook Form** - Form management
-- **Zustand** - State management
-- **Recharts** - Data visualization
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+- **Shadcn/ui** - Modern component library
+- **Lucide React** - Beautiful icons
 
 ### Backend
-- **Express.js** - Web framework
-- **Node.js** - Runtime environment
-- **Supabase** - Database and authentication
-- **SendGrid** - Email service
-- **Multer** - File upload handling
-- **Sharp** - Image processing
-- **Winston** - Logging
-- **JWT** - Authentication tokens
+- **Supabase** - Backend-as-a-Service
+- **PostgreSQL** - Primary database
+- **Server Actions** - Next.js server-side functions
+- **Row Level Security** - Database-level security
 
-### Database
-- **Supabase (PostgreSQL)** - Primary database
-- **Supabase Storage** - File storage
-- **Redis** - Caching (optional)
-
-### DevOps
-- **Docker** - Containerization
-- **Nginx** - Reverse proxy
-- **PM2** - Process management
+### Development Tools
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **TypeScript** - Static type checking
 
 ## 📦 Installation
 
 ### Prerequisites
-- Node.js (v16 or higher)
+- Node.js 18+ 
 - npm or yarn
 - Supabase account
-- SendGrid account (for emails)
 
-### 1. Clone the repository
-```bash
-git clone <repository-url>
-cd InterLink
-```
+### 1. Clone the Repository
+\`\`\`bash
+git clone https://github.com/your-username/interlink.git
+cd interlink
+\`\`\`
 
-### 2. Install dependencies
-```bash
-npm run install:all
-```
+### 2. Install Dependencies
+\`\`\`bash
+npm install
+# or
+yarn install
+\`\`\`
 
 ### 3. Environment Setup
+Create a `.env.local` file in the root directory:
 
-#### Backend Environment (.env)
-```bash
-cd backend
-cp .env.example .env
-```
-
-Edit `.env` with your configuration:
-```env
-# Environment
-NODE_ENV=development
-PORT=3001
-
-# Supabase
-SUPABASE_URL=your_supabase_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
+\`\`\`env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
-# JWT
-JWT_SECRET=your_jwt_secret
-JWT_REFRESH_SECRET=your_jwt_refresh_secret
+# Database URLs (automatically provided by Supabase)
+POSTGRES_URL=your_postgres_connection_string
+POSTGRES_PRISMA_URL=your_postgres_prisma_url
+POSTGRES_URL_NON_POOLING=your_postgres_non_pooling_url
+POSTGRES_USER=your_postgres_user
+POSTGRES_HOST=your_postgres_host
+POSTGRES_PASSWORD=your_postgres_password
+POSTGRES_DATABASE=your_postgres_database
 
-# SendGrid
-SENDGRID_API_KEY=your_sendgrid_api_key
-FROM_EMAIL=noreply@yourdomain.com
-
-# OAuth
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-```
-
-#### Frontend Environment (.env.local)
-```bash
-cd frontend
-```
-
-Edit `.env.local`:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+# Next.js Configuration
+NEXT_PUBLIC_VERCEL_URL=http://localhost:3000
+\`\`\`
 
 ### 4. Database Setup
+Run the SQL scripts in order to set up your database:
 
-Run the SQL scripts in `frontend/scripts/` in order:
-1. `001-create-users-table.sql`
-2. `002-create-clients-table.sql`
-3. `003-create-projects-table.sql`
-4. ... (continue with all scripts)
+\`\`\`bash
+# Execute scripts in the scripts/ folder in numerical order
+# 001-create-users-table.sql
+# 002-create-clients-table.sql
+# 003-create-projects-table.sql
+# ... and so on
+\`\`\`
 
-### 5. Start Development
-
-```bash
-# Start both frontend and backend
+### 5. Run the Development Server
+\`\`\`bash
 npm run dev
+# or
+yarn dev
+\`\`\`
 
-# Or start individually
-npm run dev:backend
-npm run dev:frontend
-```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-The application will be available at:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:3001
+## 📁 Project Structure
 
-## 🐳 Docker Deployment
+\`\`\`
+interlink/
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Authentication pages
+│   │   ├── signin/
+│   │   ├── signup/
+│   │   └── forgot-password/
+│   ├── admin/                    # Admin dashboard
+│   │   ├── users/
+│   │   ├── content/
+│   │   └── settings/
+│   ├── company/                  # Company dashboard
+│   │   ├── clients/
+│   │   ├── projects/
+│   │   ├── reports/
+│   │   └── settings/
+│   ├── client/                   # Client dashboard
+│   │   ├── projects/
+│   │   ├── support/
+│   │   └── settings/
+│   ├── about/                    # Public pages
+│   ├── services/
+│   ├── contact/
+│   └── globals.css
+├── components/                   # Reusable components
+│   ├── ui/                       # Shadcn/ui components
+│   ├── admin/                    # Admin-specific components
+│   ├── company/                  # Company-specific components
+│   ├── client/                   # Client-specific components
+│   ├── header.tsx
+│   ├── footer.tsx
+│   └── theme-provider.tsx
+├── lib/                          # Utility functions
+│   ├── supabase/                 # Supabase configuration
+│   ├── data.ts                   # Data fetching functions
+│   └── utils.ts
+├── scripts/                      # Database scripts
+│   ├── 001-create-users-table.sql
+│   ├── 002-create-clients-table.sql
+│   └── ...
+├── hooks/                        # Custom React hooks
+├── middleware.ts                 # Next.js middleware
+└── tailwind.config.ts           # Tailwind configuration
+\`\`\`
 
-### Development with Docker
-```bash
-docker-compose up -d
-```
+## 🔐 Authentication & Authorization
 
-### Production Deployment
-```bash
-# Build production images
-docker-compose -f docker-compose.prod.yml build
+### User Roles
+- **Admin**: Full system access, user management, content management
+- **Company**: Client and project management, analytics, settings
+- **Client**: Project viewing, support tickets, profile management
 
-# Start production services
-docker-compose -f docker-compose.prod.yml up -d
-```
+### Route Protection
+Routes are protected using Next.js middleware and Supabase RLS:
 
-## 📚 API Documentation
+\`\`\`typescript
+// Protected routes by role
+/admin/*     - Admin only
+/company/*   - Company only  
+/client/*    - Client only
+\`\`\`
 
-### Authentication Endpoints
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
-- `POST /api/auth/refresh` - Token refresh
-- `POST /api/auth/forgot-password` - Password reset
+### Database Security
+- Row Level Security (RLS) enabled on all tables
+- Role-based policies for data access
+- Secure server actions for data mutations
 
-### User Management
-- `GET /api/users` - Get all users (Admin only)
-- `GET /api/users/:id` - Get user by ID
-- `POST /api/users` - Create user (Admin only)
-- `PUT /api/users/:id` - Update user
-- `DELETE /api/users/:id` - Delete user (Admin only)
+## 🎨 UI/UX Design System
 
-### Client Management
-- `GET /api/clients` - Get all clients
-- `GET /api/clients/:id` - Get client by ID
-- `POST /api/clients` - Create client
-- `PUT /api/clients/:id` - Update client
-- `DELETE /api/clients/:id` - Delete client
+### Color Palette
+- **Primary**: Purple gradients (#8B5CF6 to #A855F7)
+- **Secondary**: Blue accents (#3B82F6)
+- **Background**: Dynamic gradients with glass effects
+- **Text**: High contrast for accessibility
 
-### Project Management
-- `GET /api/projects` - Get all projects
-- `GET /api/projects/:id` - Get project by ID
-- `POST /api/projects` - Create project
-- `PUT /api/projects/:id` - Update project
-- `DELETE /api/projects/:id` - Delete project
+### Components
+- Glass morphism cards with backdrop blur
+- Animated gradients and floating elements
+- Consistent spacing using Tailwind's scale
+- Responsive breakpoints for all devices
 
-### File Management
-- `POST /api/uploads/single` - Upload single file
-- `POST /api/uploads/multiple` - Upload multiple files
-- `DELETE /api/uploads/:filename` - Delete file
-- `GET /api/uploads/project/:projectId` - Get project files
+### Animations
+- Framer Motion for smooth transitions
+- Staggered animations for lists
+- Hover effects and micro-interactions
+- Loading states and skeleton screens
 
-### Analytics
-- `GET /api/analytics/dashboard` - Dashboard analytics
-- `GET /api/analytics/engagement` - User engagement metrics
-- `GET /api/analytics/financial` - Financial metrics
+## 📊 Database Schema
 
-## 🔧 Configuration
+### Core Tables
+- **users**: User authentication and profiles
+- **clients**: Client information and relationships
+- **projects**: Project data and status tracking
+- **inquiries**: Contact form submissions
+- **content**: CMS content management
+- **messages**: Internal messaging system
 
-### Email Templates
-Email templates are configured in `backend/src/services/emailService.js`:
-- Welcome emails
-- Password reset emails
-- Project status updates
-- Message notifications
+### Analytics Tables
+- **company_activities**: Company action tracking
+- **client_activities**: Client engagement metrics
+- **engagement_metrics**: Dashboard analytics
 
-### File Upload Settings
-Configure in `backend/.env`:
-```env
-MAX_FILE_SIZE=10485760  # 10MB
-ALLOWED_FILE_TYPES=jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,ppt,pptx
-```
-
-### Rate Limiting
-Configure in `backend/.env`:
-```env
-RATE_LIMIT_WINDOW_MS=900000  # 15 minutes
-RATE_LIMIT_MAX_REQUESTS=100  # 100 requests per window
-```
-
-## 🧪 Testing
-
-### Backend Tests
-```bash
-cd backend
-npm test
-```
-
-### Frontend Tests
-```bash
-cd frontend
-npm test
-```
-
-### Run All Tests
-```bash
-npm test
-```
+### Settings Tables
+- **app_settings**: Global application settings
+- **user_preferences**: Individual user preferences
 
 ## 🚀 Deployment
 
-### Production Build
-```bash
+### Vercel (Recommended)
+1. Connect your GitHub repository to Vercel
+2. Add environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
+
+### Manual Deployment
+\`\`\`bash
 npm run build
-```
+npm start
+\`\`\`
 
-### PM2 Deployment
-```bash
-# Install PM2 globally
-npm install -g pm2
+## 🧪 Testing
 
-# Start with PM2
-pm2 start ecosystem.config.js
+\`\`\`bash
+# Run tests
+npm test
 
-# Monitor
-pm2 monit
-```
+# Run tests in watch mode
+npm run test:watch
 
-### Environment Variables for Production
-- Set `NODE_ENV=production`
-- Configure proper database URLs
-- Set up SSL certificates
-- Configure CORS origins
-- Set up monitoring and logging
-
-## 📊 Monitoring
-
-### Logging
-- Application logs are stored in `backend/logs/`
-- Error logs: `backend/logs/error.log`
-- Combined logs: `backend/logs/combined.log`
-
-### Health Check
-- Backend health check: `GET /health`
-- Returns server status and uptime
-
-## 🔒 Security
-
-### Features Implemented
-- Helmet.js for security headers
-- CORS configuration
-- Rate limiting
-- Input validation
-- SQL injection protection
-- XSS protection
-- JWT token validation
-- File upload validation
-
-### Security Best Practices
-- Use environment variables for secrets
-- Implement proper authentication
-- Regular security updates
-- Monitor for vulnerabilities
-- Use HTTPS in production
+# Run tests with coverage
+npm run test:coverage
+\`\`\`
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+- Follow TypeScript best practices
+- Use Tailwind CSS for styling
+- Write meaningful commit messages
+- Add tests for new features
+- Update documentation as needed
+
+## 📝 API Documentation
+
+### Server Actions
+
+#### Authentication
+- `signIn(formData)` - User sign in
+- `signUp(formData)` - User registration
+- `signOut()` - User sign out
+- `resetPassword(formData)` - Password reset
+
+#### Client Management
+- `createClient(formData)` - Create new client
+- `updateClient(id, formData)` - Update client
+- `deleteClient(id)` - Delete client
+
+#### Project Management
+- `createProject(formData)` - Create new project
+- `updateProject(id, formData)` - Update project
+- `deleteProject(id)` - Delete project
+
+#### User Management (Admin)
+- `createUser(formData)` - Create new user
+- `updateUser(id, formData)` - Update user
+- `deleteUser(id)` - Delete user
+
+## 🔧 Configuration
+
+### Tailwind CSS
+Custom configuration with:
+- Extended color palette
+- Glass morphism utilities
+- Animation classes
+- Responsive breakpoints
+
+### Next.js
+- App Router configuration
+- Middleware for authentication
+- Server Actions enabled
+- TypeScript strict mode
+
+## 📈 Performance
+
+### Optimization Features
+- Server-side rendering (SSR)
+- Static generation where possible
+- Image optimization with Next.js Image
+- Code splitting and lazy loading
+- Efficient database queries with proper indexing
+
+### Monitoring
+- Built-in analytics tracking
+- Error boundary components
+- Performance metrics collection
+- User engagement tracking
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Database Connection Issues**
+\`\`\`bash
+# Check environment variables
+echo $NEXT_PUBLIC_SUPABASE_URL
+echo $NEXT_PUBLIC_SUPABASE_ANON_KEY
+\`\`\`
+
+**Authentication Problems**
+- Verify Supabase configuration
+- Check RLS policies
+- Ensure proper role assignments
+
+**Build Errors**
+\`\`\`bash
+# Clear Next.js cache
+rm -rf .next
+npm run build
+\`\`\`
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## 🙏 Acknowledgments
 
-For support, please contact the development team or create an issue in the repository.
+- [Next.js](https://nextjs.org/) - The React framework
+- [Supabase](https://supabase.com/) - Backend-as-a-Service
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [Shadcn/ui](https://ui.shadcn.com/) - Component library
+- [Framer Motion](https://www.framer.com/motion/) - Animation library
 
-## 📈 Roadmap
+## 📞 Support
 
-- [ ] Real-time notifications with Socket.io
-- [ ] Mobile app development
-- [ ] Advanced analytics dashboard
-- [ ] Integration with third-party services
-- [ ] API rate limiting improvements
-- [ ] Enhanced security features
-- [ ] Performance optimizations
-- [ ] Multi-language support
+For support, email support@interlink.com or join our Slack channel.
 
 ---
 
-Built with ❤️ by the InterLink Team
+**Built with ❤️ by the Interlink Team**
